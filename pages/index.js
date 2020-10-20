@@ -1,65 +1,74 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import styles from '../styles/Home.module.css';
+import { useState } from "react";
+
+const tiers = [
+    { floor: 0, ceil: 5.99, price: 0.9957 },
+    { floor: 6, ceil: 15.99, price: 1.6189 },
+    { floor: 16, ceil: 25, price: 3.2557 },
+    { floor: 25.1, ceil: Infinity, price: 4.5407 },
+];
+
+const calculateBill = (consumption) => {
+    const tier = tiers.filter(
+        (t) => t.floor <= consumption && t.ceil > consumption
+    )[0];
+
+    return (consumption * tier.price).toFixed(2);
+};
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const [total, setTotal] = useState(0);
+    const [error, setError] = useState("");
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    const handleChange = (e) => {
+        const consumption = e.target.value;
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        if (consumption) {
+            if (isNaN(consumption)) {
+                setTotal(0);
+                setError("");
+            } else {
+                setTotal(calculateBill(consumption));
+                setError("");
+            }
+        } else {
+            setTotal(0);
+            setError("");
+        }
+    };
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    return (
+        <>
+            <Head>
+                <title>
+                    Billy
+                </title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+            <nav className={styles.navbar}>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+            </nav>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+            <section className={styles.logoContainer}>
+                <img className={styles.logo} src="Billy.svg" />
+            </section>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+            <div className={styles.calculator}>
+                <input type="number" min="0" className={styles.calculatorInput} placeholder="Consumo mensal (m3)" onChange={handleChange} />
+                <div className={styles.resultMessage}>
+                    {total > 0 &&
+                        <>
+                            <div>O teu consumo de àgua mensal foi de</div>
+                            <div className={styles.finalPrice}>{total} €</div>
+                            <div className={styles.disclaimer}>Os valores apresentados são respeitantes apenas ao consumo mensal de àgua e não ilustram o valor final da fatura</div>
+                        </>
+
+                    }
+                </div>
+                {error && <div style={{ color: "red" }}>{error}</div>}
+            </div>
+        </>
+    );
 }
