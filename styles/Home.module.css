@@ -62,6 +62,29 @@
     font-size: 32px;
 }
 
+.priceDetails {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.priceRow {
+    display: flex;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.priceLabel {
+    width: 50%;
+    text-align: right;
+    padding-right: 20px;
+    font-weight: 500;
+}
+
+.priceValue {
+
+}
+
 .disclaimer {
     margin-top: 80px;
     font-size: 12px;
