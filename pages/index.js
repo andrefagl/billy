@@ -112,7 +112,7 @@ export default function Home() {
                                     </div>
                                     <div className={styles.priceRow}>
                                         <div className={styles.priceLabel}>
-                                            Taxa fixa de àgua
+                                            Taxa fixa de água
                                         </div>
                                         <div className={styles.priceValue}>
                                             { taxes.fixedDailyTax } €
